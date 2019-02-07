@@ -16,7 +16,8 @@ class IndexPage extends React.Component<{}, IState> {
     this.setState(({ todos }) => ({
       todos: [...todos, todo]
     }));
-  onDelete = (index: number, event: React.MouseEvent) => {
+
+  onDelete = (index: number) => {
     this.setState(({ todos }) => {
       const newTodos = [...todos];
       newTodos.splice(index, 1);
