@@ -1,7 +1,5 @@
 import Document, { Head, Main, NextScript } from "next/document";
 
-import "../styles/style.scss";
-
 export default class MyDocument extends Document {
   render() {
     return (
@@ -11,6 +9,7 @@ export default class MyDocument extends Document {
             name="viewport"
             content="width=device-width, initial-scale=1.0"
           />
+          <title>Magnificent Todo-List</title>
         </Head>
         <body>
           <Main />
