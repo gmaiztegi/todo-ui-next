@@ -1,7 +1,7 @@
 import React from "react";
 import { DeepReadonly } from "utility-types";
 import { TodoItemList, AddTodoForm } from "../components";
-import "../styles/style.scss";
+import styles from "../styles/style.scss";
 
 type IState = DeepReadonly<{
   todos: string[];
@@ -26,11 +26,11 @@ class IndexPage extends React.Component<{}, IState> {
 
   render() {
     return (
-      <>
-        <h1>A title!</h1>
+      <div className={styles.box}>
+        <h1 className={styles.title}>To-do list</h1>
         <AddTodoForm onCreate={this.onCreate} />
         <TodoItemList todos={this.state.todos} onDelete={this.onDelete} />
-      </>
+      </div>
     );
   }
 }
