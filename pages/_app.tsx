@@ -1,6 +1,8 @@
 import App, { Container, NextAppContext } from "next/app";
 import Head from "next/head";
 
+import "../styles/style.scss";
+
 export default class MyApp extends App {
   static async getInitialProps({ Component, ctx }: NextAppContext) {
     let pageProps = {};

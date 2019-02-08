@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import { DeepReadonly } from "utility-types";
 import { AddTodoForm, TodoItemList } from "../components";
-import "../styles/style.scss";
 
 type IState = DeepReadonly<{
   todos: string[];
