@@ -1,7 +1,14 @@
+import getConfig from "next/config";
 import React from "react";
 import styled from "styled-components";
 import { DeepReadonly } from "utility-types";
 import { AddTodoForm, TodoItemList } from "../components";
+import TodoEndpoint from "../endpoint/todo";
+import ITodo from "../model/todo";
+
+interface IProps {
+  todos: ITodo[];
+}
 
 type IState = DeepReadonly<{
   todos: string[];
@@ -30,9 +37,16 @@ const PageTitle = styled.h1`
   margin: 0 0 2rem;
 `;
 
-class IndexPage extends React.Component<{}, IState> {
+class IndexPage extends React.Component<IProps, IState> {
   state = {
-    todos: ["HEY", "EI"]
+    todos: this.props.todos.map(todo => todo.label)
+  };
+
+  static getInitialProps = async () => {
+    const { publicRuntimeConfig } = getConfig();
+    const apiClient = new TodoEndpoint(publicRuntimeConfig.apiEndpoint);
+    const todos = await apiClient.findAll();
+    return { todos };
   };
 
   onCreate = (todo: string) =>
