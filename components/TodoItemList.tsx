@@ -8,7 +8,7 @@ interface IProps {
 
 const TodoItemList: React.FC<IProps> = ({ todos, onDelete }) => (
   <>
-    {todos.map((todo, index) => (
+    {todos.map(todo => (
       <TodoItem
         key={todo._id}
         label={todo.label}
