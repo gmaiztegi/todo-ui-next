@@ -8,7 +8,8 @@ const config = {
   cssModules: true,
   publicRuntimeConfig: {
     apiEndpoint: process.env.API_ENDPOINT
-  }
+  },
+  poweredByHeader: false
 };
 
 module.exports = withTypescript(withSass(withCSS(config)));
