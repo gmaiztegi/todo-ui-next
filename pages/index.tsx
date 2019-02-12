@@ -1,5 +1,6 @@
 import getConfig from "next/config";
 import React from "react";
+import io from "socket.io-client";
 import styled from "styled-components";
 import { DeepReadonly } from "utility-types";
 import { AddTodoForm, TodoItemList } from "../components";
@@ -11,7 +12,7 @@ interface IProps {
 }
 
 type IState = DeepReadonly<{
-  todos: string[];
+  todos: ITodo[];
 }>;
 
 const TodoBox = styled.div`
@@ -38,9 +39,21 @@ const PageTitle = styled.h1`
 `;
 
 class IndexPage extends React.Component<IProps, IState> {
-  state = {
-    todos: this.props.todos.map(todo => todo.label)
+  readonly state = {
+    todos: this.props.todos
   };
+
+  private readonly socket: SocketIOClient.Socket;
+
+  constructor(props: IProps) {
+    super(props);
+
+    this.socket = io(getConfig().publicRuntimeConfig.apiEndpoint, {
+      autoConnect: false
+    });
+    this.socket.on("connect", () => this.socket.emit("initialize"));
+    this.socket.on("todos", (todos: ITodo[]) => this.setState({ todos }));
+  }
 
   static getInitialProps = async () => {
     const { publicRuntimeConfig } = getConfig();
@@ -49,18 +62,25 @@ class IndexPage extends React.Component<IProps, IState> {
     return { todos };
   };
 
-  onCreate = (todo: string) =>
-    this.setState(({ todos }) => ({
-      todos: [...todos, todo]
-    }));
+  onCreate = (todo: string) => this.socket.emit("add", todo);
 
-  onDelete = (index: number) => {
-    this.setState(({ todos }) => {
+  onDelete = (todo: ITodo) => {
+    /* this.setState(({ todos }) => {
       const newTodos = [...todos];
       newTodos.splice(index, 1);
       return { todos: newTodos };
-    });
+    }); */
+    this.socket.emit("delete", todo._id);
   };
+
+  componentDidMount() {
+    this.socket.open();
+    this.socket.emit("initialize");
+  }
+
+  componentWillUnmount() {
+    this.socket.close();
+  }
 
   render() {
     return (

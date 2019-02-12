@@ -1,14 +1,19 @@
+import ITodo from "../model/todo";
 import TodoItem from "./TodoItem";
 
 interface IProps {
-  todos: string[];
-  onDelete: (index: number) => void;
+  todos: ITodo[];
+  onDelete: (index: ITodo) => void;
 }
 
 const TodoItemList: React.FC<IProps> = ({ todos, onDelete }) => (
   <>
     {todos.map((todo, index) => (
-      <TodoItem key={index} label={todo} onDelete={() => onDelete(index)} />
+      <TodoItem
+        key={todo._id}
+        label={todo.label}
+        onDelete={() => onDelete(todo)}
+      />
     ))}
   </>
 );
