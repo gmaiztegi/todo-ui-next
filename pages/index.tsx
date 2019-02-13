@@ -60,11 +60,6 @@ class IndexPage extends React.Component<IProps, IState> {
   onCreate = (todo: string) => this.props.socket.emit("add", todo);
 
   onDelete = (todo: ITodo) => {
-    /* this.setState(({ todos }) => {
-      const newTodos = [...todos];
-      newTodos.splice(index, 1);
-      return { todos: newTodos };
-    }); */
     this.props.socket.emit("delete", todo._id);
   };
 
