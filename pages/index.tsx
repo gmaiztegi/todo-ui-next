@@ -1,13 +1,13 @@
 import getConfig from "next/config";
 import React from "react";
-import io from "socket.io-client";
 import styled from "styled-components";
 import { DeepReadonly } from "utility-types";
 import { AddTodoForm, TodoItemList } from "../components";
 import TodoEndpoint from "../endpoint/todo";
+import { InjectedProps, withTodoWebsocket } from "../hocs/withTodoWebsocket";
 import ITodo from "../model/todo";
 
-interface IProps {
+interface IProps extends InjectedProps {
   todos: ITodo[];
 }
 
@@ -43,16 +43,11 @@ class IndexPage extends React.Component<IProps, IState> {
     todos: this.props.todos
   };
 
-  private readonly socket: SocketIOClient.Socket;
-
   constructor(props: IProps) {
     super(props);
 
-    this.socket = io(getConfig().publicRuntimeConfig.apiEndpoint, {
-      autoConnect: false
-    });
-    this.socket.on("connect", () => this.socket.emit("initialize"));
-    this.socket.on("todos", (todos: ITodo[]) => this.setState({ todos }));
+    props.socket.on("connect", () => props.socket.emit("initialize"));
+    props.socket.on("todos", (todos: ITodo[]) => this.setState({ todos }));
   }
 
   static getInitialProps = async () => {
@@ -62,7 +57,7 @@ class IndexPage extends React.Component<IProps, IState> {
     return { todos };
   };
 
-  onCreate = (todo: string) => this.socket.emit("add", todo);
+  onCreate = (todo: string) => this.props.socket.emit("add", todo);
 
   onDelete = (todo: ITodo) => {
     /* this.setState(({ todos }) => {
@@ -70,17 +65,8 @@ class IndexPage extends React.Component<IProps, IState> {
       newTodos.splice(index, 1);
       return { todos: newTodos };
     }); */
-    this.socket.emit("delete", todo._id);
+    this.props.socket.emit("delete", todo._id);
   };
-
-  componentDidMount() {
-    this.socket.open();
-    this.socket.emit("initialize");
-  }
-
-  componentWillUnmount() {
-    this.socket.close();
-  }
 
   render() {
     return (
@@ -93,4 +79,5 @@ class IndexPage extends React.Component<IProps, IState> {
   }
 }
 
-export default IndexPage;
+// export default IndexPage;
+export default withTodoWebsocket(IndexPage);
