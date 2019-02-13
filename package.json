@@ -6,7 +6,10 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:cov": "jest --coverage"
   },
   "author": "",
   "license": "ISC",
@@ -27,14 +30,22 @@
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
+    "@types/enzyme": "^3.1.17",
+    "@types/enzyme-adapter-react-16": "^1.0.3",
+    "@types/jest": "^23.3.14",
     "@types/next": "^7.0.9",
     "@types/react": "^16.8.2",
     "@types/react-dom": "^16.8.0",
     "@types/socket.io-client": "^1.4.32",
     "@types/styled-components": "^4.1.8",
+    "babel-jest": "^23.6.0",
+    "enzyme": "^3.8.0",
+    "enzyme-adapter-react-16": "^1.9.1",
+    "jest": "^23.6.0",
     "tslint": "^5.12.1",
     "tslint-config-prettier": "^1.18.0",
     "tslint-config-standard": "^8.0.1",
-    "tslint-react": "^3.6.0"
+    "tslint-react": "^3.6.0",
+    "typescript": "^3.3.3"
   }
 }
