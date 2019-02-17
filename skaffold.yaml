@@ -5,13 +5,12 @@ build:
     envTemplate:
       template: "{{.DOCKER_REGISTRY}}/gmaiztegi/todo-ui-next:{{.VERSION}}"
   artifacts:
-  - imageName: changeme
-    workspace: .
+  - image: changeme
+    context: .
     docker: {}
   local: {}
 deploy:
-  kubectl:
-    manifests:
+  kubectl: {}
 profiles:
 - name: dev
   build:
