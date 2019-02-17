@@ -1,11 +1,15 @@
 import { mount } from "enzyme";
 import getConfig, { RuntimeConfig } from "next/config";
 import IndexPage from "../../pages/index";
+
 jest.mock("next/config");
 
 describe("Index", () => {
   beforeAll(() => {
-    getConfig.mockImplementation(
+    (getConfig as jest.Mock<
+      ReturnType<typeof getConfig>,
+      []
+    >).mockImplementation(
       (): RuntimeConfig => {
         return { publicRuntimeConfig: {}, serverRuntimeConfig: {} };
       }
