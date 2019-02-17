@@ -21,6 +21,9 @@ spec:
       - name: {{ .Chart.Name }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
+        env:
+        - name: API_ENDPOINT
+          value: {{ default "" .Values.apiEndpoint | quote }}
         ports:
         - containerPort: {{ .Values.service.internalPort }}
         livenessProbe:
