@@ -3,8 +3,8 @@
 # Declare variables to be passed into your templates.
 replicaCount: 1
 image:
-  repository: draft
-  tag: dev
+  repository: 10.105.91.241:5000/gmaiztegi/todo-ui-next
+  tag: 0.0.3
   pullPolicy: IfNotPresent
 service:
   name: todo-ui-next
