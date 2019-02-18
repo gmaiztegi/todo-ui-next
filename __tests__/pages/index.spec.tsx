@@ -1,15 +1,24 @@
 import { mount, shallow } from "enzyme";
+import { NextContext } from "next";
 import getConfig, { RuntimeConfig } from "next/config";
 import { AddTodoForm, TodoItemList } from "../../components";
+import TodoEndpoint from "../../endpoint/todo";
 import ITodo from "../../model/todo";
 import IndexPage from "../../pages/index";
 
 jest.mock("next/config");
+jest.mock("../../endpoint/todo");
 jest.mock("../../hocs/withTodoWebsocket", () => {
   return {
-    withTodoWebsocket: Wrapped => ({ todos }) => (
-      <Wrapped todos={todos} socket={{ on: jest.fn(), emit: jest.fn() }} />
-    )
+    withTodoWebsocket: Wrapped => {
+      const wrap = ({ todos }) => (
+        <Wrapped todos={todos} socket={{ on: jest.fn(), emit: jest.fn() }} />
+      );
+
+      wrap.WrappedComponent = Wrapped;
+
+      return wrap;
+    }
   };
 });
 
@@ -25,6 +34,10 @@ describe("Index", () => {
         return { publicRuntimeConfig: {}, serverRuntimeConfig: {} };
       }
     );
+  });
+
+  beforeEach(() => {
+    jest.clearAllMocks();
   });
 
   it("should render without throwing an error", () => {
@@ -92,5 +105,17 @@ describe("Index", () => {
       .prop("onDelete");
     onDelete(todo);
     expect(socket.emit).toHaveBeenCalledWith("delete", todo._id);
+  });
+
+  it("it should get the initial todos from API", async () => {
+    expect(TodoEndpoint).not.toHaveBeenCalled();
+
+    const todos: ITodo[] = [{ _id: "id1", label: "label1" }];
+    (TodoEndpoint.prototype.findAll as jest.Mock).mockReturnValue(todos);
+
+    const props = await IndexPage.WrappedComponent.getInitialProps(
+      {} as NextContext
+    );
+    expect(props).toEqual({ todos });
   });
 });
