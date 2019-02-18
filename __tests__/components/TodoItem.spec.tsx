@@ -5,6 +5,7 @@ describe("TodoItem", () => {
   it("should render the label", () => {
     const label = "label1";
 
+    // tslint:disable-next-line:no-empty
     const wrap = mount(<TodoItem label={label} onDelete={() => {}} />);
 
     expect(wrap.find("p").text()).toEqual(label);
