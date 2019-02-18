@@ -3,7 +3,7 @@ import TodoItem from "./TodoItem";
 
 interface IProps {
   todos: ITodo[];
-  onDelete: (index: ITodo) => void;
+  onDelete: (todo: ITodo) => void;
 }
 
 const TodoItemList: React.FC<IProps> = ({ todos, onDelete }) => (

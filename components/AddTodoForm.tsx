@@ -10,12 +10,12 @@ const AddTodoForm: React.FC<IProps> = ({ onCreate }) => {
   return (
     <form
       onSubmit={event => {
+        event.stopPropagation();
         event.preventDefault();
         if (text.length > 0) {
           onCreate(text);
           setText("");
         }
-        return false;
       }}
     >
       <input value={text} onChange={event => setText(event.target.value)} />
